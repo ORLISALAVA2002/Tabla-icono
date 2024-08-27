@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario y Tabla</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Formulario de Información</h2>
+        <form id="infoForm">
+            <div class="form-group">
+                <label for="cedula">Cédula:</label>
+                <input type="text" class="form-control" id="cedula" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="edad">Edad:</label>
+                <input type="number" class="form-control" id="edad" required>
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo:</label>
+                <input type="email" class="form-control" id="correo" required>
+            </div>
+            <button type="submit" class="btn btn-outline-secondary"> + Guardar</button>
+        </form>
+
+        <h2 class="mt-5">Tabla de Información</h2>
+        <table class="table table-striped mt-3" id="infoTable">
+            <thead>
+                <tr>
+                    <th>Cédula</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los datos se agregarán aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('infoForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            // Obtener los valores del formulario
+            const cedula = document.getElementById('cedula').value;
+            const nombre = document.getElementById('nombre').value;
+            const edad = document.getElementById('edad').value;
+            const correo = document.getElementById('correo').value;
+
+            // Crear una nueva fila en la tabla
+            const table = document.getElementById('infoTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            newRow.insertCell(0).textContent = cedula;
+            newRow.insertCell(1).textContent = nombre;
+            newRow.insertCell(2).textContent = edad;
+            newRow.insertCell(3).textContent = correo;
+
+            // Crear los botones de acción
+            const actionsCell = newRow.insertCell(4);
+            actionsCell.innerHTML = `
+                <button class="btn btn-warning btn-sm mr-2" onclick="editRow(this)">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteRow(this)">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            `;
+
+            // Limpiar el formulario
+            document.getElementById('infoForm').reset();
+        });
+
+        function editRow(button) {
+            // Obtener la fila actual
+            const row = button.closest('tr');
+            // Rellenar el formulario con los datos de la fila
+            document.getElementById('cedula').value = row.cells[0].textContent;
+            document.getElementById('nombre').value = row.cells[1].textContent;
+            document.getElementById('edad').value = row.cells[2].textContent;
+            document.getElementById('correo').value = row.cells[3].textContent;
+
+            // Eliminar la fila después de la edición
+            row.remove();
+        }
+
+        function deleteRow(button) {
+            // Confirmar eliminación
+            if (confirm('¿Estás seguro de que quieres eliminar estos datos?')) {
+                const row = button.closest('tr');
+                row.remove();
+            }
+        }
+    </script>
+</body>
+</html>
